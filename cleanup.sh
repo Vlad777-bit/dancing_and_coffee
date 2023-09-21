@@ -1,3 +1,3 @@
-#! /bin/bush
-git reset --hard HEAD 
-git clean -f 
+#!/bin/bash
+git reset --hard HEAD
+git clean -f
