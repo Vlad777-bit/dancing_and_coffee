@@ -36,14 +36,28 @@ class CustomerDescriptionGenerator:
         gender = gender_map.get(row['sex'], 'неопределенного')
 
         age = CustomerDescriptionGenerator._convert_years(row['age'])
+        device = CustomerDescriptionGenerator._translate_device(row['device_type'])
 
         description = (
             f"Пользователь {row['name']} {gender} пола, {age} "
-            f"совершил(а) покупку на {row['bill']} у.е. с {row['device_type']} браузера {row['browser']}. "
+            f"совершил(а) покупку на {row['bill']} у.е. с {device} браузера {row['browser']}. "
             f"Регион, из которого совершалась покупка: {row['region']}."
         )
 
         return description
+
+    @staticmethod
+    def _translate_device(device_type):
+        """ Выполняет перевод устройства с англ. на рус. """
+
+        devices = {
+            'mobile': 'мобильного',
+            'tablet': 'планшетного',
+            'laptop': 'переносного компьютера',
+            'desktop': 'стационарного компьютера',
+        }
+
+        return devices.get(device_type, "пользовательского устройства")
 
     @staticmethod
     def _convert_years(age):
@@ -69,8 +83,9 @@ class CustomerDescriptionGenerator:
                 file.write(description + '\n\n')
 
 
-# Создаём инстанс класс
+# Создаём инстанс класса, принимающий исходный файл и название финального файла
 generator = CustomerDescriptionGenerator(
     "./web_clients_correct.csv", "load.txt"
 )
+# Запускаем конвектор
 generator.process_file()
